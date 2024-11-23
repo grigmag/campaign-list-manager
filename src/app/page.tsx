@@ -1,7 +1,6 @@
 "use client";
 
 import { TrashIcon } from "lucide-react";
-import { Button } from "~/components/ui/button";
 import {
   Table,
   TableBody,
@@ -10,6 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 
 export default function HomePage() {
@@ -42,9 +52,31 @@ export default function HomePage() {
         <TableCell className="font-medium">{subscriber.email}</TableCell>
         <TableCell>{subscriber.name}</TableCell>
         <TableCell className="text-right">
-          <Button variant="outline" size="sm">
-            <TrashIcon />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <TrashIcon size={18} />
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-white">
+                  Delete subscriber?
+                </AlertDialogTitle>
+
+                <AlertDialogDescription>
+                  This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel className="text-white">
+                  Cancel
+                </AlertDialogCancel>
+
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </TableCell>
       </TableRow>
     ));
