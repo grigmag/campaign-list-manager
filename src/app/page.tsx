@@ -28,14 +28,9 @@ export default function HomePage() {
   const deleteSubscriberMutation = useDeleteSubscriber();
 
   const handleDeleteSubscriber = (email: string) => {
-    // TODO simplify argument
     // TODO display toast on success / error
     // TODO maybe invalidate subscribers query or optimistically update it
-    deleteSubscriberMutation.mutate({
-      data: {
-        email,
-      },
-    });
+    deleteSubscriberMutation.mutate(email);
   };
 
   let content: JSX.Element | undefined;
