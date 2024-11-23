@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { campaignMonitorService } from "~/campaignMonitor/campaignMonitorService";
 import type { CreateSubscriberRequestDto } from "~/dto/createSubscriber.dto";
+import type { DeleteSubscriberRequestDto } from "~/dto/deleteSubscriber.dto";
 import type { GetSubscribersResponseDto } from "~/dto/getSubscribers.dto";
 
 export async function GET(_request: NextRequest) {
@@ -37,6 +38,30 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { error: "Failed to create subscriber" },
+      { status: 500 },
+    );
+  }
+}
+
+// NOTE Having a DELETE /subscribers instead of
+// e.g. /subscribers/[email] route is a bit weird,
+// but avoids potential issues such as
+// weird encoding of special characters in the URL
+export async function DELETE(request: NextRequest) {
+  // TODO validate body
+  const body = (await request.json()) as DeleteSubscriberRequestDto;
+
+  try {
+    await campaignMonitorService.deleteSubscriber(body.data.email);
+
+    return NextResponse.json({
+      status: 204,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { error: "Failed to delete subscriber" },
       { status: 500 },
     );
   }

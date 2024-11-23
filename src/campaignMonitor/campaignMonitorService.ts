@@ -53,9 +53,9 @@ class CampaignMonitorService {
     }
   }
 
-  async deleteSubscriber(subscriber: Subscriber): Promise<void> {
+  async deleteSubscriber(email: Subscriber["email"]): Promise<void> {
     const params = new URLSearchParams({
-      email: subscriber.email,
+      email,
     });
 
     const response = await fetch(
