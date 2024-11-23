@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { campaignMonitorService } from "~/campaignMonitor/campaignMonitorService";
+import type { GetSubscribersResponseDto } from "~/dto/getSubscribers.dto";
 
 export async function GET(_request: Request) {
   try {
-    const results = await campaignMonitorService.getSubscribers();
+    const subscribers = await campaignMonitorService.getSubscribers();
 
-    return NextResponse.json({
-      data: results,
-    });
+    const response: GetSubscribersResponseDto = {
+      data: subscribers,
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error(error);
 
