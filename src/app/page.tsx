@@ -22,15 +22,29 @@ import {
 } from "~/components/ui/alert-dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
+import { useToast } from "~/hooks/use-toast";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
   const deleteSubscriberMutation = useDeleteSubscriber();
 
+  const { toast } = useToast();
+
   const handleDeleteSubscriber = (email: string) => {
-    // TODO display toast on success / error
     // TODO maybe invalidate subscribers query or optimistically update it
-    deleteSubscriberMutation.mutate(email);
+    deleteSubscriberMutation.mutate(email, {
+      onSuccess: () => {
+        toast({
+          description: "The subscriber has been deleted.",
+        });
+      },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          description: "Something went wrong! Please try again.",
+        });
+      },
+    });
   };
 
   let content: JSX.Element | undefined;
