@@ -1,6 +1,7 @@
 import { type Subscriber } from "~/types/Subscriber.interface";
 import { env } from "../env";
 import { type GetSubscribersCmResponseDto } from "./dto/getSubscribers.cm.dto";
+import type { CreateSubscriberCmRequestDto } from "./dto/createSubscriber.cm.dto";
 
 class CampaignMonitorService {
   private readonly baseUrl = "https://api.createsend.com/api/v3.3";
@@ -8,15 +9,15 @@ class CampaignMonitorService {
   private readonly clientId = env.CAMPAIGN_MONITOR_CLIENT_ID;
   private readonly listId = env.CAMPAIGN_MONITOR_LIST_ID;
 
+  private readonly headers = {
+    Authorization: `Basic ${Buffer.from(this.apiKey).toString("base64")}`,
+    "Content-Type": "application/json",
+  };
+
   async getSubscribers(): Promise<Subscriber[]> {
     const response = await fetch(
       `${this.baseUrl}/lists/${this.listId}/active.json`,
-      {
-        headers: {
-          Authorization: `Basic ${Buffer.from(this.apiKey).toString("base64")}`,
-          "Content-Type": "application/json",
-        },
-      },
+      { headers: this.headers },
     );
 
     if (!response.ok) {
@@ -29,6 +30,27 @@ class CampaignMonitorService {
       email: subscriber.EmailAddress,
       name: subscriber.Name,
     }));
+  }
+
+  async createSubscriber(subscriber: Subscriber): Promise<void> {
+    const body: CreateSubscriberCmRequestDto = {
+      EmailAddress: subscriber.email,
+      Name: subscriber.name,
+      ConsentToTrack: "Yes",
+    };
+
+    const response = await fetch(
+      `${this.baseUrl}/subscribers/${this.listId}.json`,
+      {
+        method: "POST",
+        headers: this.headers,
+        body: JSON.stringify(body),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch subscribers: ${response.statusText}`);
+    }
   }
 }
 
