@@ -1,4 +1,4 @@
-import { env } from "./env";
+import { env } from "../env";
 
 class CampaignMonitorService {
   private readonly baseUrl = "https://api.createsend.com/api/v3.3";
