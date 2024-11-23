@@ -33,10 +33,13 @@ import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
 import { useToast } from "~/hooks/use-toast";
 import { Button } from "~/components/ui/button";
 import { AddSubscriberForm } from "~/components/AddSubscriberForm";
+import { useCreateSubscriber } from "~/requests/useCreateSubscriber";
+import type { Subscriber } from "~/types/Subscriber.interface";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
   const deleteSubscriberMutation = useDeleteSubscriber();
+  const createSubscriberMutation = useCreateSubscriber();
 
   const { toast } = useToast();
 
@@ -57,8 +60,26 @@ export default function HomePage() {
     });
   };
 
-  const handleAddSubscriber = () => {
-    // TODO
+  // TODO also close dialog on click
+  const handleAddSubscriber = (values: Subscriber) => {
+    createSubscriberMutation.mutate(
+      {
+        data: values,
+      },
+      {
+        onSuccess: () => {
+          toast({
+            description: "Subscriber added successfully",
+          });
+        },
+        onError: () => {
+          toast({
+            variant: "destructive",
+            description: "Something went wrong! Please try again.",
+          });
+        },
+      },
+    );
   };
 
   let content: JSX.Element | undefined;
