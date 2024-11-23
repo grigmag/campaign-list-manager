@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { campaignMonitorService } from "~/campaignMonitor/campaignMonitorService";
-import type { CreateSubscriberRequestDto } from "~/dto/createSubscriber.dto";
-import type { DeleteSubscriberRequestDto } from "~/dto/deleteSubscriber.dto";
-import type { GetSubscribersResponseDto } from "~/dto/getSubscribers.dto";
+import type { CreateSubscriberRequestDto } from "~/app/api/subscribers/_dto/createSubscriber.dto";
+import type { DeleteSubscriberRequestDto } from "~/app/api/subscribers/_dto/deleteSubscriber.dto";
+import type { GetSubscribersResponseDto } from "~/app/api/subscribers/_dto/getSubscribers.dto";
 
 export async function GET(_request: NextRequest) {
   try {
