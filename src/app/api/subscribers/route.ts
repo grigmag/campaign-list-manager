@@ -3,6 +3,8 @@ import { campaignMonitorService } from "~/campaignMonitor/campaignMonitorService
 import type { CreateSubscriberRequestDto } from "~/app/api/subscribers/_dto/createSubscriber.dto";
 import type { DeleteSubscriberRequestDto } from "~/app/api/subscribers/_dto/deleteSubscriber.dto";
 import type { GetSubscribersResponseDto } from "~/app/api/subscribers/_dto/getSubscribers.dto";
+import { createSubscriberSchema } from "./_schemas/createSubscriber.schema";
+import { deleteSubscriberSchema } from "./_schemas/deleteSubscriber.schema";
 
 export async function GET(_request: NextRequest) {
   try {
@@ -24,10 +26,18 @@ export async function GET(_request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  // TODO validate body
-  const body = (await request.json()) as CreateSubscriberRequestDto;
-
   try {
+    const body = (await request.json()) as CreateSubscriberRequestDto;
+
+    const validationResult = createSubscriberSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Failed to validate subscriber" },
+        { status: 400 },
+      );
+    }
+
     await campaignMonitorService.createSubscriber(body.data);
 
     return NextResponse.json({
@@ -48,10 +58,18 @@ export async function POST(request: NextRequest) {
 // but avoids potential issues such as
 // weird encoding of special characters in the URL
 export async function DELETE(request: NextRequest) {
-  // TODO validate body
-  const body = (await request.json()) as DeleteSubscriberRequestDto;
-
   try {
+    const body = (await request.json()) as DeleteSubscriberRequestDto;
+
+    const validationResult = deleteSubscriberSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Failed to validate subscriber" },
+        { status: 400 },
+      );
+    }
+
     await campaignMonitorService.deleteSubscriber(body.data.email);
 
     return NextResponse.json({
