@@ -1,5 +1,15 @@
 "use client";
 
+import { TrashIcon } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 
 export default function HomePage() {
@@ -28,10 +38,15 @@ export default function HomePage() {
     );
   } else if (getSubscribersQuery.data) {
     const list = getSubscribersQuery.data.data.map((subscriber) => (
-      <div key={subscriber.email} className="flex flex-col gap-4">
-        <h2 className="text-2xl font-bold">{subscriber.name}</h2>
-        <p className="text-lg text-white/50">{subscriber.email}</p>
-      </div>
+      <TableRow key={subscriber.email}>
+        <TableCell className="font-medium">{subscriber.email}</TableCell>
+        <TableCell>{subscriber.name}</TableCell>
+        <TableCell className="text-right">
+          <Button variant="outline" size="sm">
+            <TrashIcon />
+          </Button>
+        </TableCell>
+      </TableRow>
     ));
 
     content = (
@@ -39,15 +54,24 @@ export default function HomePage() {
         <h2 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
           Subscribers
         </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          {list}
-        </div>
+
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Email</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>{list}</TableBody>
+        </Table>
       </div>
     );
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+    <main className="flex min-h-screen flex-col items-center bg-black text-white">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
           Campaign List Manager
