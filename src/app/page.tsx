@@ -1,6 +1,6 @@
 "use client";
 
-import { TrashIcon } from "lucide-react";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -20,9 +20,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
 import { useToast } from "~/hooks/use-toast";
+import { Button } from "~/components/ui/button";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
@@ -114,6 +122,22 @@ export default function HomePage() {
         <h2 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
           Subscribers
         </h2>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <PlusIcon /> Add subscriber
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="text-white">Add subscriber</DialogTitle>
+
+              {/* TODO add form */}
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
 
         <Table>
           <TableHeader>
