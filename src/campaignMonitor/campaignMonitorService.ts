@@ -1,4 +1,5 @@
 import { env } from "../env";
+import { type GetSubscribersCmResponseDto } from "./dto/getSubscribers.cm.dto";
 
 class CampaignMonitorService {
   private readonly baseUrl = "https://api.createsend.com/api/v3.3";
@@ -21,10 +22,7 @@ class CampaignMonitorService {
       throw new Error(`Failed to fetch subscribers: ${response.statusText}`);
     }
 
-    // TODO improve type safety here
-    const data = (await response.json()) as {
-      results: [];
-    };
+    const data = (await response.json()) as GetSubscribersCmResponseDto;
 
     return data;
   }
