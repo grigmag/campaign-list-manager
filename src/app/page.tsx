@@ -23,6 +23,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -31,6 +32,7 @@ import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
 import { useToast } from "~/hooks/use-toast";
 import { Button } from "~/components/ui/button";
+import { AddSubscriberForm } from "~/components/AddSubscriberForm";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
@@ -53,6 +55,10 @@ export default function HomePage() {
         });
       },
     });
+  };
+
+  const handleAddSubscriber = () => {
+    // TODO
   };
 
   let content: JSX.Element | undefined;
@@ -132,9 +138,15 @@ export default function HomePage() {
 
           <DialogContent>
             <DialogHeader>
-              <DialogTitle className="text-white">Add subscriber</DialogTitle>
+              <DialogTitle className="mb-6 text-white">
+                Add subscriber
+              </DialogTitle>
 
-              {/* TODO add form */}
+              <DialogDescription className="!mb-4 text-white">
+                Fill in the form below to add a new subscriber to the list.
+              </DialogDescription>
+
+              <AddSubscriberForm onSubmit={handleAddSubscriber} />
             </DialogHeader>
           </DialogContent>
         </Dialog>
