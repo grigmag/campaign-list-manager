@@ -21,9 +21,22 @@ import {
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
+import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
+  const deleteSubscriberMutation = useDeleteSubscriber();
+
+  const handleDeleteSubscriber = (email: string) => {
+    // TODO simplify argument
+    // TODO display toast on success / error
+    // TODO maybe invalidate subscribers query or optimistically update it
+    deleteSubscriberMutation.mutate({
+      data: {
+        email,
+      },
+    });
+  };
 
   let content: JSX.Element | undefined;
 
@@ -73,7 +86,13 @@ export default function HomePage() {
                   Cancel
                 </AlertDialogCancel>
 
-                <AlertDialogAction>Continue</AlertDialogAction>
+                <AlertDialogAction
+                  onClick={() => {
+                    handleDeleteSubscriber(subscriber.email);
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
