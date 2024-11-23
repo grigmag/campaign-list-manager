@@ -1,3 +1,4 @@
+import { type Subscriber } from "~/types/Subscriber.interface";
 import { env } from "../env";
 import { type GetSubscribersCmResponseDto } from "./dto/getSubscribers.cm.dto";
 
@@ -7,7 +8,7 @@ class CampaignMonitorService {
   private readonly clientId = env.CAMPAIGN_MONITOR_CLIENT_ID;
   private readonly listId = env.CAMPAIGN_MONITOR_LIST_ID;
 
-  async getSubscribers() {
+  async getSubscribers(): Promise<Subscriber[]> {
     const response = await fetch(
       `${this.baseUrl}/lists/${this.listId}/active.json`,
       {
@@ -24,7 +25,10 @@ class CampaignMonitorService {
 
     const data = (await response.json()) as GetSubscribersCmResponseDto;
 
-    return data;
+    return data.Results.map((subscriber) => ({
+      email: subscriber.EmailAddress,
+      name: subscriber.Name,
+    }));
   }
 }
 
