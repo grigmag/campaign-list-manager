@@ -52,6 +52,24 @@ class CampaignMonitorService {
       throw new Error(`Failed to fetch subscribers: ${response.statusText}`);
     }
   }
+
+  async deleteSubscriber(subscriber: Subscriber): Promise<void> {
+    const params = new URLSearchParams({
+      email: subscriber.email,
+    });
+
+    const response = await fetch(
+      `${this.baseUrl}/subscribers/${this.listId}.json?${params}`,
+      {
+        method: "DELETE",
+        headers: this.headers,
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch subscribers: ${response.statusText}`);
+    }
+  }
 }
 
 export const campaignMonitorService = new CampaignMonitorService();
