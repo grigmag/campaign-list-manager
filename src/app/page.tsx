@@ -62,24 +62,19 @@ export default function HomePage() {
 
   // TODO also close dialog on click
   const handleAddSubscriber = (values: Subscriber) => {
-    createSubscriberMutation.mutate(
-      {
-        data: values,
+    createSubscriberMutation.mutate(values, {
+      onSuccess: () => {
+        toast({
+          description: "Subscriber added successfully",
+        });
       },
-      {
-        onSuccess: () => {
-          toast({
-            description: "Subscriber added successfully",
-          });
-        },
-        onError: () => {
-          toast({
-            variant: "destructive",
-            description: "Something went wrong! Please try again.",
-          });
-        },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          description: "Something went wrong! Please try again.",
+        });
       },
-    );
+    });
   };
 
   let content: JSX.Element | undefined;
