@@ -18,7 +18,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
@@ -38,6 +37,8 @@ export default function HomePage() {
   const { toast } = useToast();
 
   const [isAddSubscriberDialogOpen, setIsAddSubscriberDialogOpen] =
+    useState(false);
+  const [isDeleteSubscriberDialogOpen, setIsDeleteSubscriberDialogOpen] =
     useState(false);
 
   const handleDeleteSubscriber = (email: string) => {
@@ -102,11 +103,20 @@ export default function HomePage() {
         <TableCell className="font-medium">{subscriber.email}</TableCell>
         <TableCell>{subscriber.name}</TableCell>
         <TableCell className="text-right">
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <TrashIcon size={18} />
-            </AlertDialogTrigger>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              setIsDeleteSubscriberDialogOpen(true);
+            }}
+          >
+            <TrashIcon size={18} />
+          </Button>
 
+          <AlertDialog
+            open={isDeleteSubscriberDialogOpen}
+            onOpenChange={setIsDeleteSubscriberDialogOpen}
+          >
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-white">
