@@ -31,7 +31,7 @@ export default function HomePage() {
       return;
     }
 
-    // TODO maybe invalidate subscribers query or optimistically update it
+    // TODO maybe optimistically update the subscribers query on success
     deleteSubscriberMutation.mutate(emailToDelete, {
       onSuccess: () => {
         toast({
@@ -54,6 +54,7 @@ export default function HomePage() {
   const handleAddSubscriber = (values: Subscriber) => {
     setIsAddSubscriberDialogOpen(false);
 
+    // TODO maybe optimistically update the subscribers query on success
     createSubscriberMutation.mutate(values, {
       onSuccess: () => {
         toast({
