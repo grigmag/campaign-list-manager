@@ -1,14 +1,6 @@
 "use client";
 
-import { PlusIcon, TrashIcon } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import { PlusIcon } from "lucide-react";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
 import { useToast } from "~/hooks/use-toast";
@@ -18,6 +10,7 @@ import type { Subscriber } from "~/types/Subscriber.interface";
 import { useState } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { AddSubscriberFormDialog } from "~/components/AddSubscriberFormDialog";
+import { SubscribersTable } from "~/components/SubscribersTable";
 import { DeleteSusbscriberConfirmationDialog } from "~/components/DeleteSusbscriberConfirmationDialog";
 
 export default function HomePage() {
@@ -31,10 +24,15 @@ export default function HomePage() {
     useState(false);
   const [isDeleteSubscriberDialogOpen, setIsDeleteSubscriberDialogOpen] =
     useState(false);
+  const [emailToDelete, setEmailToDelete] = useState<string | null>(null);
 
-  const handleDeleteSubscriber = (email: string) => {
+  const handleDeleteSubscriber = () => {
+    if (!emailToDelete) {
+      return;
+    }
+
     // TODO maybe invalidate subscribers query or optimistically update it
-    deleteSubscriberMutation.mutate(email, {
+    deleteSubscriberMutation.mutate(emailToDelete, {
       onSuccess: () => {
         toast({
           description: "The subscriber has been deleted.",
@@ -47,6 +45,8 @@ export default function HomePage() {
         });
       },
     });
+
+    setEmailToDelete(null);
   };
 
   const handleAddSubscriber = (values: Subscriber) => {
@@ -89,32 +89,6 @@ export default function HomePage() {
       </>
     );
   } else if (getSubscribersQuery.data) {
-    const list = getSubscribersQuery.data.data.map((subscriber) => (
-      <TableRow key={subscriber.email}>
-        <TableCell className="font-medium">{subscriber.email}</TableCell>
-        <TableCell>{subscriber.name}</TableCell>
-        <TableCell className="text-right">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              setIsDeleteSubscriberDialogOpen(true);
-            }}
-          >
-            <TrashIcon size={18} />
-          </Button>
-
-          <DeleteSusbscriberConfirmationDialog
-            open={isDeleteSubscriberDialogOpen}
-            onOpenChange={setIsDeleteSubscriberDialogOpen}
-            onClickDeleteSubscriber={() => {
-              handleDeleteSubscriber(subscriber.email);
-            }}
-          />
-        </TableCell>
-      </TableRow>
-    ));
-
     content = (
       <>
         <div className="mb-2 flex flex-row justify-between">
@@ -135,17 +109,24 @@ export default function HomePage() {
           onSubmit={handleAddSubscriber}
         />
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Email</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead></TableHead>
-            </TableRow>
-          </TableHeader>
+        <DeleteSusbscriberConfirmationDialog
+          open={isDeleteSubscriberDialogOpen}
+          onOpenChange={(open) => {
+            setIsDeleteSubscriberDialogOpen(open);
+            if (!open) {
+              setEmailToDelete(null);
+            }
+          }}
+          onClickDeleteSubscriber={handleDeleteSubscriber}
+        />
 
-          <TableBody>{list}</TableBody>
-        </Table>
+        <SubscribersTable
+          subscribers={getSubscribersQuery.data.data}
+          onClickDeleteSubscriber={(email) => {
+            setEmailToDelete(email);
+            setIsDeleteSubscriberDialogOpen(true);
+          }}
+        />
       </>
     );
   }
