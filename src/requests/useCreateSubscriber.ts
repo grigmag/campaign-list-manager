@@ -1,9 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CreateSubscriberRequestDto } from "~/app/api/subscribers/_dto/createSubscriber.dto";
 import type { Subscriber } from "~/types/Subscriber.interface";
+import { getSubscribersQueryKey } from "./useGetSubscribers";
 
-export const useCreateSubscriber = () =>
-  useMutation({
+export const useCreateSubscriber = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: async (subscriber: Subscriber) => {
       const body: CreateSubscriberRequestDto = {
         data: subscriber,
@@ -23,4 +26,10 @@ export const useCreateSubscriber = () =>
 
       return;
     },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: getSubscribersQueryKey,
+      });
+    },
   });
+};

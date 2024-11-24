@@ -1,8 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { DeleteSubscriberRequestDto } from "~/app/api/subscribers/_dto/deleteSubscriber.dto";
+import { getSubscribersQueryKey } from "./useGetSubscribers";
 
-export const useDeleteSubscriber = () =>
-  useMutation({
+export const useDeleteSubscriber = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: async (email: string) => {
       const body: DeleteSubscriberRequestDto = {
         data: {
@@ -24,4 +27,10 @@ export const useDeleteSubscriber = () =>
 
       return;
     },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: getSubscribersQueryKey,
+      });
+    },
   });
+};
