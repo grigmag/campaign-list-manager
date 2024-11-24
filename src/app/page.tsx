@@ -26,7 +26,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "~/components/ui/dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
@@ -35,6 +34,7 @@ import { Button } from "~/components/ui/button";
 import { AddSubscriberForm } from "~/components/AddSubscriberForm";
 import { useCreateSubscriber } from "~/requests/useCreateSubscriber";
 import type { Subscriber } from "~/types/Subscriber.interface";
+import { useState } from "react";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
@@ -42,6 +42,9 @@ export default function HomePage() {
   const createSubscriberMutation = useCreateSubscriber();
 
   const { toast } = useToast();
+
+  const [isAddSubscriberDialogOpen, setIsAddSubscriberDialogOpen] =
+    useState(false);
 
   const handleDeleteSubscriber = (email: string) => {
     // TODO maybe invalidate subscribers query or optimistically update it
@@ -60,8 +63,9 @@ export default function HomePage() {
     });
   };
 
-  // TODO also close dialog on click
   const handleAddSubscriber = (values: Subscriber) => {
+    setIsAddSubscriberDialogOpen(false);
+
     createSubscriberMutation.mutate(values, {
       onSuccess: () => {
         toast({
@@ -145,13 +149,18 @@ export default function HomePage() {
           Subscribers
         </h2>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <PlusIcon /> Add subscriber
-            </Button>
-          </DialogTrigger>
+        <Button
+          onClick={() => {
+            setIsAddSubscriberDialogOpen(true);
+          }}
+        >
+          <PlusIcon /> Add subscriber
+        </Button>
 
+        <Dialog
+          open={isAddSubscriberDialogOpen}
+          onOpenChange={setIsAddSubscriberDialogOpen}
+        >
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="mb-6 text-white">
