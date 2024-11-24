@@ -20,22 +20,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
 import { useToast } from "~/hooks/use-toast";
 import { Button } from "~/components/ui/button";
-import { AddSubscriberForm } from "~/components/AddSubscriberForm";
 import { useCreateSubscriber } from "~/requests/useCreateSubscriber";
 import type { Subscriber } from "~/types/Subscriber.interface";
 import { useState } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
+import { AddSubscriberFormDialog } from "~/components/AddSubscriberFormDialog";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
@@ -158,24 +151,11 @@ export default function HomePage() {
           </Button>
         </div>
 
-        <Dialog
+        <AddSubscriberFormDialog
           open={isAddSubscriberDialogOpen}
           onOpenChange={setIsAddSubscriberDialogOpen}
-        >
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="mb-6 text-white">
-                Add subscriber
-              </DialogTitle>
-
-              <DialogDescription className="!mb-4 text-white">
-                Fill in the form below to add a new subscriber to the list.
-              </DialogDescription>
-
-              <AddSubscriberForm onSubmit={handleAddSubscriber} />
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+          onSubmit={handleAddSubscriber}
+        />
 
         <Table>
           <TableHeader>
