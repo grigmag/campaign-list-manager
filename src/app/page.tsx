@@ -35,6 +35,7 @@ import { AddSubscriberForm } from "~/components/AddSubscriberForm";
 import { useCreateSubscriber } from "~/requests/useCreateSubscriber";
 import type { Subscriber } from "~/types/Subscriber.interface";
 import { useState } from "react";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
@@ -85,9 +86,10 @@ export default function HomePage() {
 
   if (getSubscribersQuery.isLoading) {
     content = (
-      <h2 className="mb-2 text-center text-xl font-semibold text-white">
-        Loading subscribers...
-      </h2>
+      <div className="flex flex-col items-center justify-center gap-6">
+        <Skeleton className="h-8 w-full" />
+        <Skeleton className="h-[320px] w-full rounded-xl" />
+      </div>
     );
   } else if (getSubscribersQuery.isError) {
     content = (
