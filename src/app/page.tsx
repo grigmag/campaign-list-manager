@@ -9,16 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "~/components/ui/alert-dialog";
 import { useGetSubscribers } from "~/requests/useGetSubscribers";
 import { useDeleteSubscriber } from "~/requests/useDeleteSubscriber";
 import { useToast } from "~/hooks/use-toast";
@@ -28,6 +18,7 @@ import type { Subscriber } from "~/types/Subscriber.interface";
 import { useState } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { AddSubscriberFormDialog } from "~/components/AddSubscriberFormDialog";
+import { DeleteSusbscriberConfirmationDialog } from "~/components/DeleteSusbscriberConfirmationDialog";
 
 export default function HomePage() {
   const getSubscribersQuery = useGetSubscribers();
@@ -113,36 +104,13 @@ export default function HomePage() {
             <TrashIcon size={18} />
           </Button>
 
-          <AlertDialog
+          <DeleteSusbscriberConfirmationDialog
             open={isDeleteSubscriberDialogOpen}
             onOpenChange={setIsDeleteSubscriberDialogOpen}
-          >
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle className="text-white">
-                  Delete subscriber?
-                </AlertDialogTitle>
-
-                <AlertDialogDescription>
-                  This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-
-              <AlertDialogFooter>
-                <AlertDialogCancel className="text-white">
-                  Cancel
-                </AlertDialogCancel>
-
-                <AlertDialogAction
-                  onClick={() => {
-                    handleDeleteSubscriber(subscriber.email);
-                  }}
-                >
-                  Continue
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+            onClickDeleteSubscriber={() => {
+              handleDeleteSubscriber(subscriber.email);
+            }}
+          />
         </TableCell>
       </TableRow>
     ));
