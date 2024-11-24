@@ -85,22 +85,21 @@ export default function HomePage() {
 
   if (getSubscribersQuery.isLoading) {
     content = (
-      <div className="flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h2 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Loading subscribers...
-        </h2>
-      </div>
+      <h2 className="mb-2 text-center text-xl font-semibold text-white">
+        Loading subscribers...
+      </h2>
     );
   } else if (getSubscribersQuery.isError) {
     content = (
-      <div className="flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h2 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+      <>
+        <h2 className="mb-2 text-center text-xl font-semibold text-white">
           Error loading subscribers
         </h2>
-        <p className="text-lg text-white/50">
-          {getSubscribersQuery.error.message}
+
+        <p className="text-center text-base text-white/50">
+          Please try refreshing the page
         </p>
-      </div>
+      </>
     );
   } else if (getSubscribersQuery.data) {
     const list = getSubscribersQuery.data.data.map((subscriber) => (
@@ -144,18 +143,18 @@ export default function HomePage() {
     ));
 
     content = (
-      <div className="flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h2 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Subscribers
-        </h2>
+      <>
+        <div className="mb-2 flex flex-row justify-between">
+          <h2 className="text-xl font-semibold text-white">Subscribers</h2>
 
-        <Button
-          onClick={() => {
-            setIsAddSubscriberDialogOpen(true);
-          }}
-        >
-          <PlusIcon /> Add subscriber
-        </Button>
+          <Button
+            onClick={() => {
+              setIsAddSubscriberDialogOpen(true);
+            }}
+          >
+            <PlusIcon /> Add subscriber
+          </Button>
+        </div>
 
         <Dialog
           open={isAddSubscriberDialogOpen}
@@ -187,14 +186,14 @@ export default function HomePage() {
 
           <TableBody>{list}</TableBody>
         </Table>
-      </div>
+      </>
     );
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-black text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+    <main className="min-h-screen bg-black text-white">
+      <div className="container mx-auto max-w-3xl px-4 py-16">
+        <h1 className="mb-16 text-center text-3xl font-bold text-white">
           Campaign List Manager
         </h1>
 
