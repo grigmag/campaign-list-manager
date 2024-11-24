@@ -35,7 +35,9 @@ export default function HomePage() {
     deleteSubscriberMutation.mutate(emailToDelete, {
       onSuccess: () => {
         toast({
-          description: "The subscriber has been deleted.",
+          title: "The subscriber has been deleted.",
+          description:
+            "The change might need a few moments to be displayed. Try refreshing the page if it doesn't.",
         });
       },
       onError: () => {
@@ -55,7 +57,9 @@ export default function HomePage() {
     createSubscriberMutation.mutate(values, {
       onSuccess: () => {
         toast({
-          description: "Subscriber added successfully",
+          title: "Subscriber added successfully",
+          description:
+            "The change might need a few moments to be displayed. Try refreshing the page if it doesn't.",
         });
       },
       onError: () => {
